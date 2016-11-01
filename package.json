@@ -1,0 +1,32 @@
+{
+  "name": "vue-2.0-simple-routing-example",
+  "description": "A Vue.js project",
+  "author": "Chris Fritz <chrisvfritz@gmail.com>",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors --display-error-details --display-cached --hot",
+    "clean": "rimraf -- dist",
+    "prebuild": "npm run clean",
+    "build": "webpack --config config/webpack.prod.js --inline --progress --colors --display-error-details --display-cached --bail"
+  },
+  "dependencies": {
+    "vue": "^2.0.3",
+    "vue-router": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
+    "babel-preset-es2015": "^6.0.0",
+    "copy-webpack-plugin": "^4.0.0",
+    "cross-env": "^1.0.6",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^2.24.1",
+    "rimraf": "^2.5.4",
+    "surge": "^0.18.0",
+    "vue-loader": "^9.0.0",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-merge": "^0.15.0"
+  }
+}
