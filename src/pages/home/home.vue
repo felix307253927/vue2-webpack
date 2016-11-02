@@ -10,5 +10,9 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    mounted(){
+      console.log('home is mounted!')
+    }
+  }
 </script>

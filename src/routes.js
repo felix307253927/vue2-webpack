@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-Vue.use(VueRouter);
 
-import Home from './pages/Home.vue';
-import About from './pages/About.vue';
+Vue.use(VueRouter); // install vue-router
+
 import Test from './pages/test.vue';
 import Login from './pages/login.vue';
 import Auth from './auth';
+import About from './pages/About.vue';
+import HomeModule from './pages/home/home.module';
 
 const auth = new Auth();
 
@@ -21,31 +22,29 @@ function requireAuth(to, from, next) {
   }
 }
 
+function userIsLogin(to, from, next) {
+  if (auth.loggedIn()) {
+    next('/home');
+  } else {
+    next();
+  }
+}
+
+
 const routes = [
-  {
-    path: '/home', component: Home,
-    children:[
-      { path: 'child1', component: {template:`<div>child1 page</div>`}},
-      { path: 'child2', component: {template:`<div>child2 page</div>`}}
-    ]
-  },
+  HomeModule,
   
-  {path: '/about', component: About, alias: '/alias'},
+  {path: '/about', component: About},
   {path: '/test', component: Test, beforeEnter: requireAuth},
   {
-    path: '/login', component: Login,
-    beforeEnter (to, from, next) {
-      if (auth.loggedIn()) {
-        next('/home');
-      } else {
-        next();
-      }
-    }
+    path       : '/login', component: Login,
+    beforeEnter: userIsLogin
   }
 ];
 
 export default new VueRouter({
-  routes,
+  mode: 'history',
+  // mode: 'hash', // default
   base: __dirname,
-  mode: 'history'
+  routes
 });
