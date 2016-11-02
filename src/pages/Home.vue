@@ -1,15 +1,14 @@
 <template>
-  <main-layout>
+  <div>
     <p>Welcome home</p>
-  </main-layout>
+    <div>
+      <router-link to="/home/child1">child1</router-link>
+      <router-link to="/home/child2">child2</router-link>
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
 <script>
-  import MainLayout from '../layouts/Main.vue'
-
-  export default {
-    components: {
-      MainLayout
-    }
-  }
+  export default {}
 </script>

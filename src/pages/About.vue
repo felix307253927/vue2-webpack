@@ -1,15 +1,13 @@
 <template>
-  <main-layout>
-    <p>About page</p>
-  </main-layout>
+    <p>About page {{loading}}</p>
 </template>
 
 <script>
-  import MainLayout from '../layouts/Main.vue'
-
   export default {
-    components: {
-      MainLayout
+    data () {
+      return {
+        loading: false
+      }
     }
   }
 </script>

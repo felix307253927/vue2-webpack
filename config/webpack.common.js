@@ -26,6 +26,11 @@ module.exports = {
     filename         : '[name].build.[hash].js',
     sourceMapFilename: '[name].bundle.[hash].map'
   },
+  resolve      : {
+    alias: {
+      'vue': 'vue/dist/vue.min.js' //解决 import vue from  指向的是dist/vue.common.js 而不是我们想要的dist/vue.js
+    }
+  },
   resolveLoader: {
     root: path.join(__dirname, 'node_modules')
   },

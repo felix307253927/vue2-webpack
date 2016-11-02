@@ -1,25 +1,27 @@
-import Vue from 'vue'
-import routes from './routes'
+import Vue from 'vue';
+import router from './routes';
+import Auth from './auth';
+
+const auth = new Auth();
 
 const app = new Vue({
-  el: '#app',
-  data: {
-    currentRoute: window.location.pathname
-  },
-  computed: {
-    ViewComponent () {
-      const matchingView = routes[this.currentRoute];
-      return matchingView
-        ? require('./pages/' + matchingView + '.vue')
-        : require('./pages/404.vue')
+  el      : '#app',
+  model   : '',
+  router  : router,
+  template: `
+    <div>
+      <router-link to="/home">Go to Home</router-link>
+      <router-link to="/about">Go to About</router-link>
+      <router-link to="/test">Go to test</router-link>
+      <a href="javascript:;" @click="logout()">logout</a>
+      <router-view></router-view>    
+    </div>
+  `,
+  methods : {
+    logout(){
+      auth.logout(()=>{
+        this.$router.replace('/home');
+      });
     }
-  },
-  render (h) {
-    return h(this.ViewComponent)
   }
-});
-
-window.addEventListener('popstate', () => {
-  console.log(window.location.pathname);
-  app.currentRoute = window.location.pathname;
 });
