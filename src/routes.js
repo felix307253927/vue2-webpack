@@ -1,15 +1,10 @@
-import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-Vue.use(VueRouter); // install vue-router
-
 import Test from './pages/test.vue';
 import Login from './pages/login.vue';
-import Auth from './auth';
-import About from './pages/About.vue';
+import auth from './auth.vue';
+import About from './pages/about.vue';
 import HomeModule from './pages/home/home.module';
 
-const auth = new Auth();
 
 function requireAuth(to, from, next) {
   if (!auth.loggedIn()) {

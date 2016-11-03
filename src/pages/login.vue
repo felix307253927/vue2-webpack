@@ -21,8 +21,7 @@
 </template>
 
 <script>
-  import Auth from '../auth';
-  const auth = new Auth();
+  import auth from '../auth.vue';
   export default {
     data () {
       return {

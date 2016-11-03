@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import router from './routes';
-import Auth from './auth';
-
-const auth = new Auth();
+import auth from './auth.vue';
 
 const app = new Vue({
   el      : '#app',
