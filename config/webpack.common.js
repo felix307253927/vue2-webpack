@@ -6,7 +6,7 @@
 var path               = require('path');
 var CopyWebpackPlugin  = require('copy-webpack-plugin');
 var HtmlWebpackPlugin  = require('html-webpack-plugin');
-var ExtractTextPlugin     = require('extract-text-webpack-plugin');
+var ExtractTextPlugin  = require('extract-text-webpack-plugin');
 var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 var METADATA = {
@@ -50,8 +50,13 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test  : /\.css/,
+        test  : /\.css$/,
         loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1&-autoprefixer!postcss')
+      },
+      {
+        test   : /\.scss$/,
+        exclude: /node_modules/,
+        loader : ExtractTextPlugin.extract('style', 'css!postcss!sass?importLoaders=1&-autoprefixer'),
       },
       {
         test  : /\.(png|jpg|gif|svg)$/,
