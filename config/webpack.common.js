@@ -6,6 +6,7 @@
 var path               = require('path');
 var CopyWebpackPlugin  = require('copy-webpack-plugin');
 var HtmlWebpackPlugin  = require('html-webpack-plugin');
+var ExtractTextPlugin     = require('extract-text-webpack-plugin');
 var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 var METADATA = {
@@ -49,6 +50,10 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        test  : /\.css/,
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1&-autoprefixer!postcss')
+      },
+      {
         test  : /\.(png|jpg|gif|svg)$/,
         loader: 'file',
         query : {
@@ -62,6 +67,7 @@ module.exports = {
     new CommonsChunkPlugin({
       name: ['vendor']
     }),
+    new ExtractTextPlugin('css/[name].[contenthash:8].css'),
     new CopyWebpackPlugin([
       {context: 'src', from: 'libs/**/*', to: ''},
       {context: 'src', from: 'css/**/*', to: ''},

@@ -1,3 +1,9 @@
+/**
+ * @license Created by felix on 16-11-2.
+ * @email   307253927@qq.com
+ */
+'use strict';
+
 import Vue from 'vue';
 import router from './routes';
 import auth from './auth.vue';

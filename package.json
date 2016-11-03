@@ -10,6 +10,7 @@
     "build": "webpack --config config/webpack.prod.js --inline --progress --colors --display-error-details --display-cached --bail"
   },
   "dependencies": {
+    "velocity-animate": "^1.3.1",
     "vue": "^2.0.3",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1"
@@ -21,9 +22,12 @@
     "copy-webpack-plugin": "^4.0.0",
     "cross-env": "^1.0.6",
     "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.4",
     "html-webpack-plugin": "^2.24.1",
+    "node-sass": "^3.11.0",
     "rimraf": "^2.5.4",
+    "sass-loader": "^4.0.2",
     "surge": "^0.18.0",
     "vue-loader": "^9.0.0",
     "webpack": "^1.13.3",
