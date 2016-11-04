@@ -7,23 +7,25 @@
 import Vue from 'vue';
 import router from './routes';
 import auth from './auth.vue';
+import topNav from './pages/top-nav.vue';
 
 const app = new Vue({
-  el      : '#app',
-  model   : '',
-  router  : router,
-  template: `
+  el        : '#app',
+  router    : router,
+  template  : `
     <div>
-      <router-link to="/home">Go to Home</router-link>
-      <router-link to="/about">Go to About</router-link>
-      <router-link to="/test">Go to test</router-link>
-      <a href="javascript:;" @click="logout()">logout</a>
-      <router-view></router-view>    
+      <top-nav></top-nav>
+      <div class="main-view">
+        <router-view></router-view>   
+      </div>
     </div>
   `,
-  methods : {
+  components: {
+    'top-nav': topNav
+  },
+  methods   : {
     logout(){
-      auth.logout(()=>{
+      auth.logout(()=> {
         this.$router.replace('/home');
       });
     }

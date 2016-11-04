@@ -13,7 +13,7 @@ import HomeModule from './pages/home/home.module';
 
 
 function requireAuth(to, from, next) {
-  if (!auth.loggedIn()) {
+  if (!auth.isLogin()) {
     next({
       path : '/login',
       query: {redirect: to.fullPath}
@@ -24,7 +24,7 @@ function requireAuth(to, from, next) {
 }
 
 function userIsLogin(to, from, next) {
-  if (auth.loggedIn()) {
+  if (auth.isLogin()) {
     next('/home');
   } else {
     next();
@@ -34,7 +34,6 @@ function userIsLogin(to, from, next) {
 
 const routes = [
   HomeModule,
-  
   {path: '/about', component: About},
   {path: '/test', component: Test, beforeEnter: requireAuth},
   {

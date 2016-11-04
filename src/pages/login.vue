@@ -23,6 +23,7 @@
 <script>
   import auth from '../auth.vue';
   export default {
+    el:'#app',
     data () {
       return {
         email: '',

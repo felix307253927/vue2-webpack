@@ -30,14 +30,14 @@
 
     logout(callback)
     {
-      if (this.loggedIn()) {
+      if (this.isLogin()) {
         localStorage.removeItem('token');
         callback && callback();
       }
     }
     ,
 
-    loggedIn()
+    isLogin()
     {
       return !!localStorage.token
     }
