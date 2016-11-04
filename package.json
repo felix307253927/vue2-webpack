@@ -1,7 +1,7 @@
 {
-  "name": "vue-2.0-simple-routing-example",
-  "description": "A Vue.js project",
-  "author": "Chris Fritz <chrisvfritz@gmail.com>",
+  "name": "vue-2",
+  "description": "A Vue webpack project",
+  "author": "felix <307253927@qq.com>",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --progress --colors --display-error-details --display-cached --hot",
