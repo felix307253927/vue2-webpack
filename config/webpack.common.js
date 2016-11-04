@@ -24,7 +24,7 @@ module.exports = {
   },
   output       : {
     path             : 'dist',
-    filename         : '[name].build.[hash].js',
+    filename         : '[name].bundle.[hash].js',
     sourceMapFilename: '[name].bundle.[hash].map'
   },
   resolve      : {
