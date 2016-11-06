@@ -155,7 +155,6 @@
     cursor: pointer;
     display: inline-block;
     min-height: 1em;
-    min-width: 5em;
     vertical-align: baseline;
     background: #5e7a88;
     color: #fff;
@@ -184,33 +183,33 @@
 </style>
 
 <template>
-  <div @click.stop="" class="calendar" v-show="show" :style="{'left':x+'px','top':y+'px'}" transition="calendar"
+  <div @click.stop="" class="calendar" v-show="calendar.show" :style="{'left':calendar.x+'px','top':calendar.y+'px'}"
+       transition="calendar"
        transition-mode="out-in">
-    <div v-if="type!='time'">
+    <div v-if="calendar.type!='time'">
       <div class="calendar-tools">
                 <span class="calendar-prev" @click="prev">
                     <svg width="16" height="16" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink"><g class="transform-group"><g
-                      transform="scale(0.015625, 0.015625)"><path
-                      d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z"
-                      fill="#5e7a88"></path></g></g></svg>
+                        transform="scale(0.015625, 0.015625)"><path
+                        d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z"
+                        fill="#5e7a88"></path></g></g></svg>
                 </span>
         <span class="calendar-next" @click="next">
                     <svg width="16" height="16" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink"><g class="transform-group"><g
-                      transform="scale(0.015625, 0.015625)"><path
-                      d="M761.056 532.128c0.512-0.992 1.344-1.824 1.792-2.848 8.8-18.304 5.92-40.704-9.664-55.424L399.936 139.744c-19.264-18.208-49.632-17.344-67.872 1.888-18.208 19.264-17.376 49.632 1.888 67.872l316.96 299.84-315.712 304.288c-19.072 18.4-19.648 48.768-1.248 67.872 9.408 9.792 21.984 14.688 34.56 14.688 12 0 24-4.48 33.312-13.44l350.048-337.376c0.672-0.672 0.928-1.6 1.6-2.304 0.512-0.48 1.056-0.832 1.568-1.344C757.76 538.88 759.2 535.392 761.056 532.128z"
-                      fill="#5e7a88"></path></g></g></svg>
+                        transform="scale(0.015625, 0.015625)"><path
+                        d="M761.056 532.128c0.512-0.992 1.344-1.824 1.792-2.848 8.8-18.304 5.92-40.704-9.664-55.424L399.936 139.744c-19.264-18.208-49.632-17.344-67.872 1.888-18.208 19.264-17.376 49.632 1.888 67.872l316.96 299.84-315.712 304.288c-19.072 18.4-19.648 48.768-1.248 67.872 9.408 9.792 21.984 14.688 34.56 14.688 12 0 24-4.48 33.312-13.44l350.048-337.376c0.672-0.672 0.928-1.6 1.6-2.304 0.512-0.48 1.056-0.832 1.568-1.344C757.76 538.88 759.2 535.392 761.056 532.128z"
+                        fill="#5e7a88"></path></g></g></svg>
                 </span>
         <div class="text center">
-          <input type="text" v-model="year" :value="year" @change="render(year,month)" min="1970" max="2100"
-                 maxlength="4">/{{monthString}}
+          <input type="text" v-model="year" :value="year" @change="render(year,month)" min="1970" max="2200" maxlength="4">/ &nbsp;{{monthString}}
         </div>
       </div>
       <table cellpadding="5">
         <thead>
         <tr>
-          <td v-for="week in weeks" class="week">{{week}}</td>
+          <td v-for="week in calendar.weeks" class="week">{{week}}</td>
         </tr>
         </thead>
         <tr v-for="(w,k1) in days" :title="k1">
@@ -223,7 +222,7 @@
         </tr>
       </table>
     </div>
-    <div class="calendar-time" v-show="type=='datetime'||type=='time'">
+    <div class="calendar-time" v-show="calendar.type=='datetime'||calendar.type=='time'">
 
       <div class="timer">
         <input type="text" v-model="hour" :value="hour" min="0" max="23" maxlength="2">
@@ -234,7 +233,7 @@
         秒
       </div>
     </div>
-    <div class="calendar-button" v-show="type=='datetime'||type=='time'||range">
+    <div class="calendar-button" v-show="calendar.type=='datetime'||calendar.type=='time'||calendar.range">
       <span @click="ok">确定</span>
       <span @click="cancel" class="cancel">取消</span>
     </div>
@@ -242,66 +241,39 @@
 </template>
 
 <script>
+  const options = {
+    show      : false,
+    type      : "date",
+    value     : "",
+    x         : 0,
+    y         : 0,
+    begin     : "",
+    end       : "",
+    range     : false,
+    rangeBegin: [],
+    rangeEnd  : [],
+    sep       : "",
+    weeks     : null,
+    months    : null
+  };
+  if(navigator.language.match(/zh|ZH|cn|CN/)){
+    options.weeks = ['日', '一', '二', '三', '四', '五', '六'];
+    options.months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+  } else {
+    options.weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    options.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  }
+  function initCalendar(opts) {
+    for (let k in options) {
+      opts[k] = opts[k] || opts[k] === false ? opts[k] : options[k];
+    }
+  }
   export default {
     props  : {
-      show      : {
-        type   : Boolean,
-        twoWay : true,
-        default: false
-      },
-      type      : {
-        type   : String,
-        default: "date"
-      },
-      value     : {
-        type   : String,
-        twoWay : true,
-        default: ""
-      },
-      x         : {
-        type   : Number,
-        default: 0
-      },
-      y         : {
-        type   : Number,
-        default: 0
-      },
-      begin     : {
-        type   : String,
-        twoWay : true,
-        default: ""
-      },
-      end       : {
-        type   : String,
-        default: ""
-      },
-      range     : {
-        type   : Boolean,
-        default: false
-      },
-      rangeBegin: {
-        type   : Array,
-        default: Array
-      },
-      rangeEnd  : {
-        type   : Array,
-        default: Array
-      },
-      sep       : {
-        type   : String,
-        twoWay : true,
-        default: ""
-      },
-      weeks     : {
-        type   : Array,
-        default: function () {
-          return ['日', '一', '二', '三', '四', '五', '六']
-        }
-      },
-      months    : {
-        type   : Array,
-        default: function () {
-          return ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+      calendar: {
+        type: Object,
+        default(){
+          return options
         }
       }
     },
@@ -317,12 +289,13 @@
         today       : [],
         currentMonth: Number,
         monthString : "",
-        now         : 0
+        now         : 0,
+        initTimer   : null
       }
     },
     created() {
-      this.init();
-      // 延迟绑定事件，防止关闭
+      this.calendar.show && this.init();
+      // 绑定关闭事件
       window.setTimeout(() => {
         document.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -330,97 +303,86 @@
         }, false)
       }, 500)
     },
-    // 测试用
     watch  : {
-      // year(val, old) {
-      //     console.log("new %s old %s time:%s", val, old, +new Date)
-      // },
-      show(){
-        this.init()
+      'calendar.show' : function (show) {
+        if(show){
+          clearTimeout(this.initTimer);
+          this.initTimer = setTimeout(()=>{
+            this.init();
+          }, 10)
+        }
       },
-      value(){
-        console.log('value');
-        this.init()
+      'calendar.value': function () {
+        clearTimeout(this.initTimer);
+        this.calendar.show && (this.initTimer = setTimeout(()=>{
+          this.init();
+        }, 10));
       }
     },
     methods: {
-      // 日期补零
-      zero(n) {
-        return n < 10 ? '0' + n : n
+      // 补零
+      zerofill(n) {
+        return ('00' + n).substr(-2, 2);
       },
-      // 初始化一些东西
       init(){
+        initCalendar(this.calendar);
         this.now = new Date();
-        if (this.value != "") {
-          if (this.value.indexOf("-") != -1) this.sep = "-";
-          if (this.value.indexOf(".") != -1) this.sep = ".";
-          if (this.value.indexOf("/") != -1) this.sep = "/";
-          if (this.type == "date") {
-            var split  = this.value.split(this.sep);
-            this.year  = parseInt(split[0]);
-            this.month = parseInt(split[1]) - 1;
-            this.day   = parseInt(split[2]);
-          } else if (this.type == "datetime") {
-            var split     = this.value.split(" ");
-            var splitDate = split[0].split(this.sep);
-            this.year     = parseInt(splitDate[0]);
-            this.month    = parseInt(splitDate[1]) - 1;
-            this.day      = parseInt(splitDate[2]);
-            if (split.length > 1) {
-              var splitTime = split[1].split(":");
-              this.hour     = splitTime[0];
-              this.minute   = splitTime[1];
-              this.second   = splitTime[2];
-            }
+        let reg  = /^ *(\d{2,4})([-\/.])([01]?\d)\2([0123]?\d)( ([012]?\d):(\d?\d):(\d?\d))? *$/;
+        if (this.calendar.value && reg.test(this.calendar.value)) {
+          this.calendar.sep = RegExp.$2;
+          this.year         = RegExp.$1;
+          this.month        = RegExp.$3 - 1;
+          this.day          = RegExp.$4;
+          if (this.calendar.type == "datetime" && RegExp.$5) {
+            this.hour   = RegExp.$6;
+            this.minute = RegExp.$7;
+            this.second = RegExp.$8;
           }
-          if (this.range) {
-            var split = this.value.split(" ~ ");
-            if (split.length > 1) {
-              var beginSplit  = split[0].split(this.sep);
-              var endSplit    = split[1].split(this.sep);
-              this.rangeBegin = [parseInt(beginSplit[0]), parseInt(beginSplit[1] - 1), parseInt(beginSplit[2])];
-              this.rangeEnd   = [parseInt(endSplit[0]), parseInt(endSplit[1] - 1), parseInt(endSplit[2])];
-            }
+        } else if (this.calendar.range) {
+          let dateReg = /(\d{2,4})([-\/.])([01]?\d)\2([0123]?\d) ?~ ?(\d{2,4})\2([01]?\d)\2([0123]?\d)/;
+          if (dateReg.test(this.calendar.value)) {
+            this.calendar.sep        = RegExp.$2;
+            this.calendar.rangeBegin = [RegExp.$1, RegExp.$3 - 1, RegExp.$4];
+            this.calendar.rangeEnd   = [RegExp.$5, RegExp.$6 - 1, RegExp.$7];
           }
         } else {
-          if (this.sep == "")this.sep = "/";
-          this.year   = this.now.getFullYear();
-          this.month  = this.now.getMonth();
-          this.day    = this.now.getDate();
-          this.hour   = this.zero(this.now.getHours());
-          this.minute = this.zero(this.now.getMinutes());
-          this.second = this.zero(this.now.getSeconds());
-          if (this.range) {
-            this.rangeBegin = Array;
-            this.rangeEnd   = Array;
+          this.calendar.sep = this.calendar.sep || "/";
+          this.year         = this.now.getFullYear();
+          this.month        = this.now.getMonth();
+          this.day          = this.now.getDate();
+          this.hour         = this.zerofill(this.now.getHours());
+          this.minute       = this.zerofill(this.now.getMinutes());
+          this.second       = this.zerofill(this.now.getSeconds());
+          if (this.calendar.range) {
+            this.calendar.rangeBegin = [];
+            this.calendar.rangeEnd   = [];
           }
         }
-        this.monthString = this.months[this.month];
+        this.monthString = this.calendar.months[this.month];
         this.render(this.year, this.month);
       },
       // 渲染日期
       render(y, m) {
-        if (!this.range) {
-          this.rangeBegin = [];
-          this.rangeEnd   = [];
+        if (!this.calendar.range) {
+          this.calendar.rangeBegin = [];
+          this.calendar.rangeEnd   = [];
         }
-        var firstDayOfMonth    = new Date(y, m, 1).getDay();         //当月第一天
-        var lastDateOfMonth    = new Date(y, m + 1, 0).getDate();    //当月最后一天
-        var lastDayOfLastMonth = new Date(y, m, 0).getDate();     //最后一月的最后一天
+        let firstDayOfMonth    = new Date(y, m, 1).getDay();
+        let lastDateOfMonth    = new Date(y, m + 1, 0).getDate();
+        let lastDayOfLastMonth = new Date(y, m, 0).getDate();
         this.year              = y;
-        this.currentMonth      = this.months[m];
-        var seletSplit         = this.value.split(" ")[0].split(this.sep);
+        this.currentMonth      = this.calendar.months[m];
+        let seletSplit         = this.calendar.value.split(" ")[0].split(this.calendar.sep);
 
-        var i, line = 0, temp = [];
+        let i, line = 0, temp = [];
         for (i = 1; i <= lastDateOfMonth; i++) {
-          var dow = new Date(y, m, i).getDay();
-          // 第一行
+          let dow = new Date(y, m, i).getDay();
           if (dow == 0) {
             temp[line] = [];
           } else if (i == 1) {
             temp[line] = [];
-            var k      = lastDayOfLastMonth - firstDayOfMonth + 1;
-            for (var j = 0; j < firstDayOfMonth; j++) {
+            let k      = lastDayOfLastMonth - firstDayOfMonth + 1;
+            for (let j = 0; j < firstDayOfMonth; j++) {
               temp[line].push({
                 day     : k,
                 disabled: true
@@ -428,16 +390,14 @@
               k++;
             }
           }
-
-          // 如果是日期范围
-          if (this.range) {
-            var options = {
+          if (this.calendar.range) {
+            let options = {
               day: i
             };
-            if (this.rangeBegin.length > 0) {
-              var beginTime = Number(new Date(this.rangeBegin[0], this.rangeBegin[1], this.rangeBegin[2]));
-              var endTime   = Number(new Date(this.rangeEnd[0], this.rangeEnd[1], this.rangeEnd[2]));
-              var thisTime  = Number(new Date(this.year, this.month, i));
+            if (this.calendar.rangeBegin.length > 0) {
+              let beginTime = new Date(this.calendar.rangeBegin[0], this.calendar.rangeBegin[1], this.calendar.rangeBegin[2]).getTime();
+              let endTime   = new Date(this.calendar.rangeEnd[0], this.calendar.rangeEnd[1], this.calendar.rangeEnd[2]).getTime();
+              let thisTime  = new Date(this.year, this.month, i).getTime();
               if (beginTime <= thisTime && endTime >= thisTime) {
                 options.selected = true
               }
@@ -445,23 +405,18 @@
             temp[line].push(options)
           } else {
             // 单选模式
-            var chk  = new Date();
-            var chkY = chk.getFullYear();
-            var chkM = chk.getMonth();
-            // 匹配上次选中的日期
-            if (
-              parseInt(seletSplit[0]) == this.year &&
-              parseInt(seletSplit[1]) - 1 == this.month &&
-              parseInt(seletSplit[2]) == i) {
+            let chk  = new Date();
+            let chkY = chk.getFullYear();
+            let chkM = chk.getMonth();
+            if (parseInt(seletSplit[0]) == this.year && parseInt(seletSplit[1]) - 1 == this.month && parseInt(seletSplit[2]) == i) {
+              // 匹配上次选中的日期
               temp[line].push({
                 day     : i,
                 selected: true
               });
               this.today = [line, temp[line].length - 1]
-            }
-
-            // 没有默认值的时候显示选中今天日期
-            else if (chkY == this.year && chkM == this.month && i == this.day && this.value == "") {
+            } else if (chkY == this.year && chkM == this.month && i == this.day && this.calendar.value == "") {
+              // 没有默认值的时候显示选中今天日期
               temp[line].push({
                 day     : i,
                 selected: true
@@ -469,28 +424,28 @@
               this.today = [line, temp[line].length - 1]
             } else {
               // 设置可选范围
-              var options = {
+              let options = {
                 day     : i,
                 selected: false,
               };
-              if (this.begin != "") {
+              if (this.calendar.begin != "") {
 
-                var beginSplit = this.begin.split(this.sep);
-                var beginTime  = Number(new Date(
-                  parseInt(beginSplit[0]),
-                  parseInt(beginSplit[1]) - 1,
-                  parseInt(beginSplit[2])
-                ));
-                if (beginTime > Number(new Date(this.year, this.month, i))) options.disabled = true
+                let beginSplit = this.calendar.begin.split(this.calendar.sep);
+                let beginTime  = new Date(
+                    parseInt(beginSplit[0]),
+                    parseInt(beginSplit[1]) - 1,
+                    parseInt(beginSplit[2])
+                ).getTime();
+                if (beginTime > new Date(this.year, this.month, i).getTime()) options.disabled = true
               }
-              if (this.end != "") {
-                var endSplit = this.end.split(this.sep);
-                var endTime  = Number(new Date(
-                  parseInt(endSplit[0]),
-                  parseInt(endSplit[1]) - 1,
-                  parseInt(endSplit[2])
-                ));
-                if (endTime < Number(new Date(this.year, this.month, i))) options.disabled = true
+              if (this.calendar.end != "") {
+                let endSplit = this.calendar.end.split(this.calendar.sep);
+                let endTime  = new Date(
+                    parseInt(endSplit[0]),
+                    parseInt(endSplit[1]) - 1,
+                    parseInt(endSplit[2])
+                ).getTime();
+                if (endTime < new Date(this.year, this.month, i).getTime()) options.disabled = true
               }
               temp[line].push(options)
             }
@@ -500,7 +455,7 @@
           if (dow == 6) {
             line++
           } else if (i == lastDateOfMonth) {
-            var k = 1;
+            let k = 1;
             for (dow; dow < 6; dow++) {
               temp[line].push({
                 day     : k,
@@ -509,10 +464,9 @@
               k++;
             }
           }
-        } //end for
+        }
         this.days = temp
       },
-      // 上月
       prev(e) {
         e.stopPropagation();
         if (this.month == 0) {
@@ -521,10 +475,9 @@
         } else {
           this.month = parseInt(this.month) - 1
         }
-        this.monthString = this.months[this.month];
+        this.monthString = this.calendar.months[this.month];
         this.render(this.year, this.month)
       },
-      //  下月
       next(e) {
         e.stopPropagation();
         if (this.month == 11) {
@@ -533,26 +486,23 @@
         } else {
           this.month = parseInt(this.month) + 1
         }
-        this.monthString = this.months[this.month];
+        this.monthString = this.calendar.months[this.month];
         this.render(this.year, this.month)
       },
-      // 选中日期
       select(k1, k2, e) {
         if (e != undefined) e.stopPropagation();
-        // 日期范围
-        if (this.range) {
-          if (this.rangeBegin.length == 0 || this.rangeEndTemp != 0) {
-            this.rangeBegin     = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second]
-            this.rangeBeginTemp = this.rangeBegin;
-            this.rangeEnd       = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second]
-            this.rangeEndTemp   = 0
+        if (this.calendar.range) {
+          if (this.calendar.rangeBegin.length == 0 || this.rangeEndTemp != 0) {
+            this.calendar.rangeBegin     = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second];
+            this.calendar.rangeBeginTemp = this.calendar.rangeBegin;
+            this.calendar.rangeEnd       = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second];
+            this.rangeEndTemp            = 0
           } else {
-            this.rangeEnd     = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second]
-            this.rangeEndTemp = 1;
-            // 判断结束日期小于开始日期则自动颠倒过来
-            if (+new Date(this.rangeEnd[0], this.rangeEnd[1], this.rangeEnd[2]) < +new Date(this.rangeBegin[0], this.rangeBegin[1], this.rangeBegin[2])) {
-              this.rangeBegin = this.rangeEnd;
-              this.rangeEnd   = this.rangeBeginTemp
+            this.calendar.rangeEnd = [this.year, this.month, this.days[k1][k2].day, this.hour, this.minute, this.second];
+            this.rangeEndTemp      = 1;
+            if (+new Date(this.calendar.rangeEnd[0], this.calendar.rangeEnd[1], this.calendar.rangeEnd[2]) < +new Date(this.calendar.rangeBegin[0], this.calendar.rangeBegin[1], this.calendar.rangeBegin[2])) {
+              this.calendar.rangeBegin = this.calendar.rangeEnd;
+              this.calendar.rangeEnd   = this.rangeBeginTemp
             }
           }
           this.render(this.year, this.month)
@@ -565,17 +515,16 @@
           this.days[k1][k2].selected = true;
           this.day                   = this.days[k1][k2].day;
           this.today                 = [k1, k2];
-          if (this.type == 'date') {
-            this.value = this.year + this.sep + this.zero(this.month + 1) + this.sep + this.zero(this.days[k1][k2].day)
-            this.show  = false
+          if (this.calendar.type == 'date') {
+            this.calendar.value = this.year + this.calendar.sep + this.zerofill(this.month + 1) + this.calendar.sep + this.zerofill(this.days[k1][k2].day)
+            this.calendar.show  = false
           }
         }
 
       },
-      // 多选的时候提交
       ok() {
         // 只有有日期的时候才执行
-        if (this.type != "time") {
+        if (this.calendar.type != "time") {
           let isSelected = false;
           this.days.forEach(v=> {
             v.forEach(vv=> {
@@ -587,10 +536,10 @@
           if (!isSelected)return false
         }
 
-        if (this.range) {
-          this.value = this.output(this.rangeBegin) + " ~ " + this.output(this.rangeEnd)
+        if (this.calendar.range) {
+          this.calendar.value = this.output(this.calendar.rangeBegin) + " ~ " + this.output(this.calendar.rangeEnd)
         } else {
-          this.value = this.output([
+          this.calendar.value = this.output([
             this.year,
             this.month,
             this.day,
@@ -599,22 +548,25 @@
             parseInt(this.second)
           ])
         }
-        this.show = false
+        this.calendar.show = false
       },
-      // 隐藏控件
       cancel() {
-        this.show = false
+        this.calendar.show = false
       },
-      // 格式化输出
+      /**
+       * 格式化输出日期
+       * @param args 日期数组 [yyyy, DD, dd, HH, mm, ss]
+       * @returns String
+       */
       output(args) {
-        if (this.type == 'time') {
-          return this.zero(args[3]) + ":" + this.zero(args[4]) + ":" + this.zero(args[5])
+        if (this.calendar.type == 'time') {
+          return `${this.zerofill(args[3])}:${this.zerofill(args[4])}:${this.zerofill(args[5])}`
         }
-        if (this.type == 'datetime') {
-          return args[0] + this.sep + this.zero(args[1] + 1) + this.sep + this.zero(args[2]) + " " + this.zero(args[3]) + ":" + this.zero(args[4]) + ":" + this.zero(args[5])
+        if (this.calendar.type == 'datetime') {
+          return `${args[0] + this.calendar.sep + this.zerofill(args[1] + 1) + this.calendar.sep + this.zerofill(args[2])} ${this.zerofill(args[3])}:${this.zerofill(args[4])}:${this.zerofill(args[5])}`
         }
-        if (this.type == 'date') {
-          return args[0] + this.sep + this.zero(args[1] + 1) + this.sep + this.zero(args[2])
+        if (this.calendar.type == 'date') {
+          return args[0] + this.calendar.sep + this.zerofill(args[1] + 1) + this.calendar.sep + this.zerofill(args[2])
         }
       }
     }
