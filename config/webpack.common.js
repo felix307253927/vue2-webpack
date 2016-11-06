@@ -24,8 +24,9 @@ module.exports = {
   },
   output       : {
     path             : 'dist',
-    filename         : '[name].bundle.[hash].js',
-    sourceMapFilename: '[name].bundle.[hash].map'
+    filename         : 'js/[name].bundle.[hash].js',
+    chunkFilename    : 'js/[name].bundle.[hash].js',
+    sourceMapFilename: 'js/[name].bundle.[hash].map'
   },
   resolve      : {
     alias: {
@@ -67,7 +68,7 @@ module.exports = {
       }
     ]
   },
-  
+
   plugins: [
     new CommonsChunkPlugin({
       name: ['vendor']
@@ -77,7 +78,6 @@ module.exports = {
       {context: 'src', from: 'libs/**/*', to: ''},
       {context: 'src', from: 'css/**/*', to: ''},
       {context: 'src', from: 'images/**/*', to: ''},
-      {context: 'src', from: 'test/**/*', to: ''},
       {context: 'src', from: '*.html', to: ''},
       {context: 'src', from: '*.ico', to: ''}
     ], {

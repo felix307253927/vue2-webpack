@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <div v-if="isLogin">
+  <div v-if="showNav">
     <router-link to="/home">Go to Home</router-link>
     <router-link to="/about">Go to About</router-link>
     <router-link to="/test">Go to test</router-link>
@@ -12,12 +12,16 @@
 </template>
 
 <script>
-  import auth from '../auth.vue';
 
   export default {
     data(){
       return {
-        isLogin: auth.isLogin()
+        showNav: true
+      }
+    },
+    watch: {
+      '$route.path': function (n) {
+        this.showNav = n != '/login';
       }
     }
   }

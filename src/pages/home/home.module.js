@@ -5,7 +5,7 @@
 'use strict';
 
 export default {
-  path     : '/home',
+  path     : '/home' ,alias:'/',
   component: resolve=> {
     require.ensure([], ()=> {
       resolve(require('./home.vue'));

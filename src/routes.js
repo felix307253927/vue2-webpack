@@ -39,7 +39,8 @@ const routes = [
   {
     path       : '/login', component: Login,
     beforeEnter: userIsLogin
-  }
+  },
+  { path: '*', redirect: '/' }
 ];
 
 export default new VueRouter({
