@@ -37,7 +37,7 @@
     height: 32px;
     font-size: 20px;
     line-height: 32px;
-    color: #5e7a88;
+    color: #6599ff;
   }
 
   .calendar-tools .float.left {
@@ -51,7 +51,7 @@
   .calendar-tools input {
     font-size: 20px;
     line-height: 32px;
-    color: #5e7a88;
+    color: #6599ff;
     width: 70px;
     text-align: center;
     border: none;
@@ -114,12 +114,12 @@
   }
 
   .calendar td.selected span {
-    background-color: #5e7a88;
+    background-color: #6599ff;
     color: #fff;
   }
 
   .calendar td.selected span:hover {
-    background-color: #5e7a88;
+    background-color: #6599ff;
     color: #fff;
   }
 
@@ -137,26 +137,28 @@
     padding: 5px;
     font-size: 14px;
     line-height: 18px;
-    color: #5e7a88;
+    color: #6599ff;
     width: 50px;
     text-align: center;
     border: 1px solid #efefef;
   }
 
   .calendar .timer input:focus {
-    border: 1px solid #5e7a88;
+    border: 1px solid #6599ff;
   }
 
   .calendar-button {
     text-align: center;
   }
 
-  .calendar-button span {
+  .calendar-button .btn {
     cursor: pointer;
     display: inline-block;
     min-height: 1em;
+    border: 1px solid transparent;
+    touch-action: manipulation;
     vertical-align: baseline;
-    background: #5e7a88;
+    background: #6599ff;
     color: #fff;
     margin: 0 .25em 0 0;
     padding: .6em 2em;
@@ -165,10 +167,39 @@
     text-align: center;
     border-radius: .3em;
   }
+  .calendar-button .btn:focus{
+    outline: 0;
+  }
+  .calendar-button .btn.success:active{
+    outline: 0;
+    color: #fff;
+    -webkit-box-shadow: inset 0 3px 5px #2468ec;
+    box-shadow: inset 0 3px 5px #2468ec;
+    border-color: #4c87fb;
+    background-color: #4c87fb;
+  }
+  .calendar-button .btn.success:hover{
+    color: #fff;
+    background-color: #4c87fb;
+    border-color: #4c87fb;
+  }
 
-  .calendar-button span.cancel {
+  .calendar-button .btn.cancel {
     background: #efefef;
     color: #666;
+  }
+
+  .calendar-button .btn.cancel:active{
+    outline: 0;
+    color: #333;
+    border-color: #a8b6c5;
+    -webkit-box-shadow: inset 0 3px 5px #bbb;
+    box-shadow: inset 0 3px 5px #bbb;
+  }
+  .calendar-button .btn.cancel:hover{
+    color: #333;
+    background-color: #eee;
+    border-color: #a8b6c5;
   }
 
   .calendar .lunar {
@@ -193,14 +224,14 @@
                          xmlns:xlink="http://www.w3.org/1999/xlink"><g class="transform-group"><g
                         transform="scale(0.015625, 0.015625)"><path
                         d="M671.968 912c-12.288 0-24.576-4.672-33.952-14.048L286.048 545.984c-18.752-18.72-18.752-49.12 0-67.872l351.968-352c18.752-18.752 49.12-18.752 67.872 0 18.752 18.72 18.752 49.12 0 67.872l-318.016 318.048 318.016 318.016c18.752 18.752 18.752 49.12 0 67.872C696.544 907.328 684.256 912 671.968 912z"
-                        fill="#5e7a88"></path></g></g></svg>
+                        fill="#6599ff"></path></g></g></svg>
                 </span>
         <span class="calendar-next" @click="next">
                     <svg width="16" height="16" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink"><g class="transform-group"><g
                         transform="scale(0.015625, 0.015625)"><path
                         d="M761.056 532.128c0.512-0.992 1.344-1.824 1.792-2.848 8.8-18.304 5.92-40.704-9.664-55.424L399.936 139.744c-19.264-18.208-49.632-17.344-67.872 1.888-18.208 19.264-17.376 49.632 1.888 67.872l316.96 299.84-315.712 304.288c-19.072 18.4-19.648 48.768-1.248 67.872 9.408 9.792 21.984 14.688 34.56 14.688 12 0 24-4.48 33.312-13.44l350.048-337.376c0.672-0.672 0.928-1.6 1.6-2.304 0.512-0.48 1.056-0.832 1.568-1.344C757.76 538.88 759.2 535.392 761.056 532.128z"
-                        fill="#5e7a88"></path></g></g></svg>
+                        fill="#6599ff"></path></g></g></svg>
                 </span>
         <div class="text center">
           <input type="text" v-model="year" :value="year" @change="render(year,month)" min="1970" max="2200" maxlength="4">/ &nbsp;{{monthString}}
@@ -234,8 +265,8 @@
       </div>
     </div>
     <div class="calendar-button" v-show="calendar.type=='datetime'||calendar.type=='time'||calendar.range">
-      <span @click="ok">确定</span>
-      <span @click="cancel" class="cancel">取消</span>
+      <button class="btn success" @click="ok">确定</button>
+      <button class="btn cancel" @click="cancel">取消</button>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@ import VueRouter from 'vue-router';
 import Test from './pages/test.vue';
 import Login from './pages/login.vue';
 import auth from './auth.vue';
-import About from './pages/about.vue';
+import Calendar from './pages/calendar.vue';
 import HomeModule from './pages/home/home.module';
 
 
@@ -34,7 +34,7 @@ function userIsLogin(to, from, next) {
 
 const routes = [
   HomeModule,
-  {path: '/about', component: About},
+  {path: '/calendar', component: Calendar},
   {path: '/test', component: Test, beforeEnter: requireAuth},
   {
     path       : '/login', component: Login,
